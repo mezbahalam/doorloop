@@ -1,6 +1,7 @@
-require "doorloop/version"
+require_relative "doorloop/version"
+require_relative "doorloop/client"
 
-module Doorloop
+module DoorLoop
   class Error < StandardError; end
   # Your code goes here...
 end
