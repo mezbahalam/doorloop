@@ -3,19 +3,20 @@
 require 'rest-client'
 require 'json'
 require 'logger'
+require_relative 'error_handler'
 require_relative 'accounts'
 require_relative 'properties'
 
 module DoorLoop
   class Client
-    attr_accessor :api_base_url, :retry_on_rate_limit
+    attr_accessor :api_token, :api_base_url, :retry_on_rate_limit
 
     def initialize(api_token, api_base_url: 'https://app.doorloop.com/api', retry_on_rate_limit: false)
       @api_token = api_token
       @api_base_url = api_base_url
       @retry_on_rate_limit = retry_on_rate_limit
       @logger = Logger.new($stdout)
-      @error_handler = ErrorHandler.new(@logger, self)
+      @error_handler = DoorLoop::ErrorHandler.new(@logger, self)
     end
 
     def accounts

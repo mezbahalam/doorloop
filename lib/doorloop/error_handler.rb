@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Doorloop
+module DoorLoop
   class ErrorHandler
     def initialize(logger, client)
       @logger = logger
@@ -29,9 +29,12 @@ module Doorloop
     def handle_rate_limit(exception)
       retry_after = exception.response.headers[:retry_after].to_i
       if @client.retry_on_rate_limit
-        @logger.warn("Rate limit exceeded, retrying in #{retry_after} seconds...")
-        sleep(retry_after)
-        retry
+        begin
+          @logger.warn("Rate limit exceeded, retrying in #{retry_after} seconds...")
+          sleep(retry_after)
+        rescue DoorLoop::TooManyRequestsError
+          retry
+        end
       else
         @logger.warn("Rate limit exceeded, retry after #{retry_after} seconds.")
         raise DoorLoop::TooManyRequestsError, 'Rate limit exceeded'
