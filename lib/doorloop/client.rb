@@ -11,7 +11,7 @@ module DoorLoop
   class Client
     attr_accessor :api_token, :api_base_url, :retry_on_rate_limit
 
-    def initialize(api_token, api_base_url: 'https://app.doorloop.com/api', retry_on_rate_limit: false)
+    def initialize(api_token, api_base_url: 'https://app.doorloop.com/api/', retry_on_rate_limit: false)
       @api_token = api_token
       @api_base_url = api_base_url
       @retry_on_rate_limit = retry_on_rate_limit
@@ -45,6 +45,9 @@ module DoorLoop
     def build_url(path, options)
       defaults = { page_number: 1, page_size: 50, sort_by: nil, sort_descending: false }
       options = defaults.merge(options)
+
+      options.delete(:sort_by) if options[:sort_by].nil?
+      options.delete(:sort_descending) if options[:sort_descending] == false
 
       uri = URI.join(@api_base_url, path)
       uri.query = URI.encode_www_form(options) if options.any?
