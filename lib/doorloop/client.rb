@@ -1,14 +1,21 @@
+# frozen_string_literal: true
+
 require 'rest-client'
 require 'json'
+require 'logger'
 require_relative 'accounts'
 require_relative 'properties'
 
 module DoorLoop
   class Client
-    API_BASE_URL = 'https://app.doorloop.com/api'
+    attr_accessor :api_base_url, :retry_on_rate_limit
 
-    def initialize(api_token)
+    def initialize(api_token, api_base_url: 'https://app.doorloop.com/api', retry_on_rate_limit: false)
       @api_token = api_token
+      @api_base_url = api_base_url
+      @retry_on_rate_limit = retry_on_rate_limit
+      @logger = Logger.new($stdout)
+      @error_handler = ErrorHandler.new(@logger, self)
     end
 
     def accounts
@@ -20,21 +27,9 @@ module DoorLoop
     end
 
     def get(path, options = {})
-      defaults = { page_number: 1, page_size: 50, sort_by: nil, sort_descending: false }
-      options = defaults.merge(options)
-
-      url = "#{API_BASE_URL}/#{path}"
-      if options.any?
-        query_string = options.map { |k, v| "#{k}=#{v}" }.join('&')
-        separator = url.include?('?') ? '&' : '?'
-        url += "#{separator}#{query_string}"
-      end
+      url = build_url(path, options)
       response = make_request(url)
-      begin
-        JSON.parse(response.body)
-      rescue JSON::ParserError
-        puts "Error: the API response is not a valid JSON"
-      end
+      parse_response(response)
     end
 
     private
@@ -46,13 +41,26 @@ module DoorLoop
       }
     end
 
+    def build_url(path, options)
+      defaults = { page_number: 1, page_size: 50, sort_by: nil, sort_descending: false }
+      options = defaults.merge(options)
+
+      uri = URI.join(@api_base_url, path)
+      uri.query = URI.encode_www_form(options) if options.any?
+      uri.to_s
+    rescue StandardError => e
+      @logger.error("Error building URL: #{e.message}")
+      raise DoorLoop::Error, "Error building URL: #{e.message}"
+    end
+
+    def parse_response(response)
+      JSON.parse(response.body)
+    end
+
     def make_request(url)
-      response = RestClient.get(url, headers)
-    rescue RestClient::TooManyRequests => e
-      retry_after = e.response.headers[:retry_after].to_i
-      puts "Rate limit exceeded, retrying in #{retry_after} seconds..."
-      sleep(retry_after)
-      retry
+      RestClient.get(url, headers)
+    rescue RestClient::ExceptionWithResponse => e
+      @error_handler.handle(e)
     end
   end
 end
