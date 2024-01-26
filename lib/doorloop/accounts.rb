@@ -4,8 +4,9 @@ module DoorLoop
       @client = client
     end
 
-    def list
-      @client.get('accounts')
+
+    def list(options = {})
+      @client.get('accounts', options)
     end
   end
 end
