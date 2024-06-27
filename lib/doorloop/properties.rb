@@ -10,7 +10,7 @@ module DoorLoop
       @client.get('properties', options)
     end
 
-    def get(id)
+    def retrieve(id)
       @client.get("properties/#{id}")
     end
   end

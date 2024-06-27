@@ -24,7 +24,7 @@ RSpec.describe DoorLoop::Client do
 
   describe '#get' do
     before do
-      stub_request(:get, 'https://app.doorloop.com/test_path?page_number=1&page_size=50&sort_by&sort_descending=false')
+      stub_request(:get, 'https://app.doorloop.com/test_path?page_number=1&page_size=50')
         .with(
           headers: {
             'Accept' => 'application/json',
