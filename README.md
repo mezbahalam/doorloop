@@ -1,8 +1,6 @@
 # Doorloop
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/doorloop`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome to Doorloop, an API wrapper gem for the Doorloop API. This gem allows you to easily interact with Doorloop’s API using Ruby, providing a simple and intuitive interface for managing your property management needs.
 
 ## Installation
 
@@ -22,7 +20,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use the Doorloop gem, you need to configure it with your Doorloop API key. You can set it up directly in your code:
+    
+```ruby
+    require 'doorloop'
+    
+    client = DoorLoop::Client.new('your_api_token')
+    
+    # Example: List all accounts
+    response = client.accounts.list
+    puts response
+```
+For detailed usage and API documentation, please refer to the Doorloop API [documentation](https://api.doorloop.com/reference/get-accounts).
+
 
 ## Development
 
@@ -32,7 +42,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/doorloop. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/doorloop/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/mezbahalam/doorloop. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/doorloop/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License
