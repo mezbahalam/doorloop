@@ -14,7 +14,7 @@ module DoorLoop
       @client.post('lease-reversed-payments', params)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("lease-reversed-payments/#{id}")
     end
 

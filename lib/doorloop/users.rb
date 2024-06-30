@@ -14,7 +14,7 @@ module DoorLoop
       @client.get('users', options)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("users/#{id}")
     end
 

@@ -6,7 +6,7 @@ module DoorLoop
       @client = client
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("tenants/#{id}")
     end
 

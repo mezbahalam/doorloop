@@ -10,7 +10,7 @@ module DoorLoop
       @client.get('leases', options)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("leases/#{id}")
     end
 

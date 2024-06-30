@@ -14,7 +14,7 @@ module DoorLoop
       @client.post('vendors', params)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("vendors/#{id}")
     end
 

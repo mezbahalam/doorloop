@@ -16,7 +16,7 @@ module DoorLoop
       @client.get('files', options)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("files/#{id}")
     end
 

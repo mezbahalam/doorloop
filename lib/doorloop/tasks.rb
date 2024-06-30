@@ -14,7 +14,7 @@ module DoorLoop
       @client.post('tasks', params)
     end
 
-    def retrieve(id)
+    def find(id)
       @client.get("tasks/#{id}")
     end
 
