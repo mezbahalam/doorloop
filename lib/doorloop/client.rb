@@ -99,7 +99,7 @@ module DoorLoop
       Expenses.new(self)
     end
 
-    def vender_bills
+    def vendor_bills
       VendorBills.new(self)
     end
 
